@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Configuration
@@ -30,10 +31,14 @@ public class DatabaseLoader {
             Team t1 = new Team("team1", TeamType.DEV, List.of(u1,u2));
             Project p1 = new Project("project1", List.of(t1));
 
-            Proposal prop1 = new Proposal("prop1", "prop1prop1", PublicationLevel.TEAM, List.of(u1));
-            Proposal prop2 = new Proposal("prop2", "prop2prop2", PublicationLevel.PROJECT, List.of(u1, u2));
-            Proposal prop3 = new Proposal("prop3", "prop3prop3", PublicationLevel.TEAM, List.of(u2));
-            Proposal prop4 = new Proposal("prop4", "prop4prop4", PublicationLevel.COMMUNITY, List.of(u1, u2));
+            Proposal prop1 = new Proposal("prop1", "prop1prop1", PublicationLevel.TEAM,
+                    LocalDate.of(2022, 3, 4), List.of(u1));
+            Proposal prop2 = new Proposal("prop2", "prop2prop2",
+                    PublicationLevel.PROJECT, LocalDate.of(2022, 3, 6), List.of(u1, u2));
+            Proposal prop3 = new Proposal("prop3", "prop3prop3", PublicationLevel.TEAM,
+                    LocalDate.of(2022, 2, 28), List.of(u2));
+            Proposal prop4 = new Proposal("prop4", "prop4prop4", PublicationLevel.COMMUNITY,
+                    LocalDate.of(2022, 3, 28), List.of(u1, u2));
 
             Vote v1 = new Vote(u1, prop2, VoteType.YES);
             Vote v2 = new Vote(u1, prop3, VoteType.NO);
