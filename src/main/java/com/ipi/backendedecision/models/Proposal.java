@@ -22,10 +22,15 @@ public class Proposal {
     private String title;
     private String description;
     private PublicationLevel publicationLevel;
-    private int votesYes;
-    private int votesNo;
-    private int abstentionVotes;
 
-    @OneToMany
+    @ManyToMany
     private List<User> owners;
+
+    public Proposal(String title, String description, PublicationLevel publicationLevel, List<User> owners) {
+        this.title = title;
+        this.description = description;
+        this.publicationLevel = publicationLevel;
+        this.owners = owners;
+    }
+
 }
