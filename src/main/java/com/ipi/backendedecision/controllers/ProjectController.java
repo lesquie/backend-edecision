@@ -2,7 +2,6 @@ package com.ipi.backendedecision.controllers;
 
 import com.ipi.backendedecision.exceptions.ProjectNotFoundException;
 import com.ipi.backendedecision.models.Project;
-import com.ipi.backendedecision.models.Team;
 import com.ipi.backendedecision.repositories.ProjectRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +28,4 @@ public class ProjectController {
         return projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     }
 
-   /* @GetMapping("/project/{id}/teams")
-    public List<Team> getAllTeamsForProject(@PathVariable Integer id) {
-        return projectRepository.findAllTeamsInProject(id).orElseThrow(() -> new ProjectNotFoundException((id)));
-    }
-*/
 }

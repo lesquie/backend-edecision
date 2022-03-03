@@ -24,6 +24,11 @@ public class Project {
 
     private String name;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany
     private List<Team> projectTeams;
+
+    public Project(String name, List<Team> projectTeams) {
+        this.name = name;
+        this.projectTeams = projectTeams;
+    }
 }

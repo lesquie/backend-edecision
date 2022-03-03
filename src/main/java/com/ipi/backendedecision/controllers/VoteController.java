@@ -1,6 +1,5 @@
 package com.ipi.backendedecision.controllers;
 
-import com.ipi.backendedecision.exceptions.AlreadyVotedException;
 import com.ipi.backendedecision.exceptions.ProposalNotFoundException;
 import com.ipi.backendedecision.exceptions.UserNotFoundException;
 import com.ipi.backendedecision.models.Proposal;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class VoteController {
@@ -50,9 +50,11 @@ public class VoteController {
 
         List<Vote> votes = voteRepository.findAllVotesForProposal(proposal.getProposalId()).orElseThrow(RuntimeException::new);
 
-        if(votes.stream().anyMatch(v -> v.getUser() == user)) {
-            throw new AlreadyVotedException();
-        }
+        Optional<Vote> userVote = votes.stream().filter(v -> v.getUser() == user).findFirst();
+
+   /*     if(userVote.isPresent()) {
+
+        }*/
 
         return new Vote(user, proposal, voteType);
     }

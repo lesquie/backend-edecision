@@ -20,12 +20,16 @@ public class Team {
     @GeneratedValue
     private int teamId;
 
+    private String teamName;
+
     private TeamType type;
 
     @OneToMany
     private List<User> users;
 
-    @ManyToOne
-    @JoinColumn(name = "projectId")
-    private Project project;
+    public Team(String teamName, TeamType type, List<User> users) {
+        this.teamName = teamName;
+        this.type = type;
+        this.users = users;
+    }
 }
