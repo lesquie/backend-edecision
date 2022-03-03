@@ -1,19 +1,14 @@
 package com.ipi.backendedecision.repositories;
 
-import com.ipi.backendedecision.models.Proposal;
-import com.ipi.backendedecision.models.Team;
 import com.ipi.backendedecision.models.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
+
 
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-    //@Query()
-    // List<Team> findAllTeamsForUser(Integer userId);
-
-    //@Query()
-    //List<Proposal> findAllProposalsForUser(Integer userId);
-
+    @Query("SELECT u from User u WHERE u.username = ?1 and u.password = ?2")
+    Optional<User> findUserByUsernameAndPassword(String username, String password);
 }
