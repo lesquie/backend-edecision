@@ -51,10 +51,7 @@ public class VoteController {
         List<Vote> votes = voteRepository.findAllVotesForProposal(proposal.getProposalId()).orElseThrow(RuntimeException::new);
 
         Optional<Vote> userVote = votes.stream().filter(v -> v.getUser() == user).findFirst();
-
-   /*     if(userVote.isPresent()) {
-
-        }*/
+        userVote.ifPresent(voteRepository::delete);
 
         return new Vote(user, proposal, voteType);
     }
