@@ -24,7 +24,7 @@ public class Team {
 
     private TeamType type;
 
-    @OneToMany
+    @ManyToMany
     private List<User> users;
 
     public Team(String teamName, TeamType type, List<User> users) {
