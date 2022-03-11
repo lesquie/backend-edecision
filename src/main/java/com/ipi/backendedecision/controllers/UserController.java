@@ -1,12 +1,10 @@
 package com.ipi.backendedecision.controllers;
 
 import com.ipi.backendedecision.exceptions.LoginFailedException;
+import com.ipi.backendedecision.exceptions.UserNotFoundException;
 import com.ipi.backendedecision.models.User;
 import com.ipi.backendedecision.repositories.UserRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,4 +28,28 @@ public class UserController {
         return (List<User>) userRepository.findAll();
     }
 
+    @PostMapping("/register")
+    public User register(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+
+    @PutMapping("/user/{id}")
+    public User updateUser(@PathVariable Integer id, @RequestBody User newUser) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    user.setUsername(newUser.getUsername());
+                    user.setPassword(newUser.getPassword());
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> {
+                    newUser.setUserId(id);
+                    return userRepository.save(newUser);
+               });
+    }
+
+    @DeleteMapping("/user/{id}")
+    public void deleteUser(@PathVariable Integer id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        userRepository.delete(user);
+    }
 }

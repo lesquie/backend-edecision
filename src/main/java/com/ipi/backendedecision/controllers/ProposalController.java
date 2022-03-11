@@ -35,6 +35,11 @@ public class ProposalController {
         return proposals.stream().map(this::proposalToProposalVote).collect(Collectors.toList());
     }
 
+    @GetMapping("/proposal/details/{id}")
+    public ProposalVote findProposalDetails(@PathVariable Integer id) {
+        return proposalRepository.findById(id).map(this::proposalToProposalVote).orElseThrow(() -> new ProposalNotFoundException(id));
+    }
+
     @GetMapping("/proposal/{id}")
     public Proposal findById(@PathVariable Integer id) {
         return proposalRepository.findById(id).orElseThrow(() -> new ProposalNotFoundException(id));
@@ -44,6 +49,23 @@ public class ProposalController {
     public Proposal add(@RequestBody Proposal newProposal) {
         newProposal.setCreationDate(LocalDate.now());
         return proposalRepository.save(newProposal);
+    }
+
+    @PutMapping("/proposal/{id}")
+    public Proposal update(@PathVariable Integer id, @RequestBody Proposal newProposal) {
+        return proposalRepository.findById(id)
+                .map(proposal -> {
+                    proposal.setTitle(newProposal.getTitle());
+                    proposal.setDescription(newProposal.getDescription());
+                    proposal.setClosingDate(newProposal.getClosingDate());
+                    proposal.setOwners(newProposal.getOwners());
+                    proposal.setPublicationLevel(newProposal.getPublicationLevel());
+                    proposal.setCreationDate(LocalDate.now());
+                    return proposalRepository.save(proposal);
+                }).orElseGet(() -> {
+                    newProposal.setProposalId(id);
+                    return proposalRepository.save(newProposal);
+                });
     }
 
     @DeleteMapping("/proposal/{id}/{userId}")
