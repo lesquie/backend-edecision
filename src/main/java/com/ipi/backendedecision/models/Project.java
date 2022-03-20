@@ -17,15 +17,16 @@ public class Project {
 
     @Id
     @GeneratedValue
-    private int projectId;
+    @Column(name = "project_id")
+    private int id;
 
     private String name;
 
     @ManyToMany
-    private List<Team> projectTeams;
+    private List<Team> teams;
 
-    public Project(String name, List<Team> projectTeams) {
+    public Project(String name, List<Team> teams) {
         this.name = name;
-        this.projectTeams = projectTeams;
+        this.teams = teams;
     }
 }

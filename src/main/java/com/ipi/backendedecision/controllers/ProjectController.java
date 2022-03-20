@@ -36,11 +36,11 @@ public class ProjectController {
         return projectRepository.findById(id)
                 .map(project -> {
                     project.setName(newProject.getName());
-                    project.setProjectTeams(newProject.getProjectTeams());
+                    project.setTeams(newProject.getTeams());
                     return project;
                 })
                 .orElseGet(() -> {
-                    newProject.setProjectId(id);
+                    newProject.setId(id);
                     return projectRepository.save(newProject);
                 });
     }

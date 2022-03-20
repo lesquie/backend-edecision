@@ -18,7 +18,8 @@ public class Team {
 
     @Id
     @GeneratedValue
-    private int teamId;
+    @Column(name = "team_id")
+    private int id;
 
     private String teamName;
 
