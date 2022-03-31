@@ -1,6 +1,5 @@
 package com.ipi.backendedecision.controllers;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.ipi.backendedecision.dao.ProposalVote;
 import com.ipi.backendedecision.exceptions.ActionUnauthorizedException;
 import com.ipi.backendedecision.exceptions.ProposalNotFoundException;
@@ -102,7 +101,6 @@ public class ProposalController {
     private int getTotalOfVotes(List<Vote> votes) {
         int voteYes = (int) votes.stream().filter(vote -> vote.getVoteType() == VoteType.YES).count();
         int voteNo = (int) votes.stream().filter(vote -> vote.getVoteType() == VoteType.NO).count();
-
         return voteYes - voteNo;
     }
 
