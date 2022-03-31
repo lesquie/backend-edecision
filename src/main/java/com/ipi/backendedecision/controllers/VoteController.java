@@ -2,6 +2,7 @@ package com.ipi.backendedecision.controllers;
 
 import com.ipi.backendedecision.exceptions.ProposalNotFoundException;
 import com.ipi.backendedecision.exceptions.UserNotFoundException;
+import com.ipi.backendedecision.exceptions.VoteNotFoundException;
 import com.ipi.backendedecision.models.Proposal;
 import com.ipi.backendedecision.models.User;
 import com.ipi.backendedecision.models.Vote;
@@ -48,7 +49,7 @@ public class VoteController {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Proposal proposal = proposalRepository.findById(id).orElseThrow(() -> new ProposalNotFoundException(id));
 
-        List<Vote> votes = voteRepository.findAllVotesForProposal(proposal.getProposalId()).orElseThrow(RuntimeException::new);
+        List<Vote> votes = voteRepository.findAllVotesForProposal(proposal.getProposalId()).orElseThrow(VoteNotFoundException::new);
 
         Optional<Vote> userVote = votes.stream().filter(v -> v.getUser() == user).findFirst();
         userVote.ifPresent(voteRepository::delete);

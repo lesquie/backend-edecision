@@ -1,6 +1,7 @@
 package com.ipi.backendedecision.controllers;
 
 import com.ipi.backendedecision.dao.ProposalVote;
+import com.ipi.backendedecision.exceptions.ActionUnauthorizedException;
 import com.ipi.backendedecision.exceptions.ProposalNotFoundException;
 import com.ipi.backendedecision.exceptions.UserNotFoundException;
 import com.ipi.backendedecision.models.Proposal;
@@ -60,6 +61,7 @@ public class ProposalController {
                     proposal.setClosingDate(newProposal.getClosingDate());
                     proposal.setOwners(newProposal.getOwners());
                     proposal.setPublicationLevel(newProposal.getPublicationLevel());
+                    proposal.setActive(newProposal.isActive());
                     proposal.setCreationDate(LocalDate.now());
                     return proposalRepository.save(proposal);
                 }).orElseGet(() -> {
@@ -68,15 +70,25 @@ public class ProposalController {
                 });
     }
 
+    @GetMapping("/proposal/{id}/{userId}/deactivate")
+    public Proposal deactivateProposal(@PathVariable Integer id, @PathVariable Integer userId) {
+        Proposal p =  proposalRepository.findById(id).orElseThrow(() -> new ProposalNotFoundException(id));
+
+        if(isUserOwner(userId, id)) {
+            p.setActive(!p.isActive());
+        } else {
+            throw new ActionUnauthorizedException();
+        }
+
+        return proposalRepository.save(p);
+    }
+
     @DeleteMapping("/proposal/{id}/{userId}")
     public void deleteProposal(@PathVariable Integer id, @PathVariable Integer userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-        Proposal p = proposalRepository.findById(id).orElseThrow(() -> new ProposalNotFoundException(id));
-
-        if(!p.getOwners().contains(user)) {
+        if(isUserOwner(userId, id)) {
             proposalRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Unauthorized Action");
+            throw new ActionUnauthorizedException();
         }
     }
 
@@ -89,7 +101,12 @@ public class ProposalController {
     private int getTotalOfVotes(List<Vote> votes) {
         int voteYes = (int) votes.stream().filter(vote -> vote.getVoteType() == VoteType.YES).count();
         int voteNo = (int) votes.stream().filter(vote -> vote.getVoteType() == VoteType.NO).count();
-
         return voteYes - voteNo;
+    }
+
+    private boolean isUserOwner(Integer userId, Integer proposalId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        Proposal proposal = proposalRepository.findById(proposalId).orElseThrow(() -> new ProposalNotFoundException(proposalId));
+        return proposal.getOwners().contains(user);
     }
 }

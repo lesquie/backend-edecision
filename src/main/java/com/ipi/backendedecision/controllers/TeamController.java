@@ -39,7 +39,7 @@ public class TeamController {
             team.setUsers(newTeam.getUsers());
             return teamRepository.save(team);
         }).orElseGet(() -> {
-            newTeam.setTeamId(id);
+            newTeam.setId(id);
             return teamRepository.save(newTeam);
         });
     }

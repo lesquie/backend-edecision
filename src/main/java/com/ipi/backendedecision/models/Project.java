@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -20,15 +17,16 @@ public class Project {
 
     @Id
     @GeneratedValue
-    private int projectId;
+    @Column(name = "project_id")
+    private int id;
 
     private String name;
 
-    @OneToMany
-    private List<Team> projectTeams;
+    @ManyToMany
+    private List<Team> teams;
 
-    public Project(String name, List<Team> projectTeams) {
+    public Project(String name, List<Team> teams) {
         this.name = name;
-        this.projectTeams = projectTeams;
+        this.teams = teams;
     }
 }

@@ -18,13 +18,14 @@ public class Team {
 
     @Id
     @GeneratedValue
-    private int teamId;
+    @Column(name = "team_id")
+    private int id;
 
     private String teamName;
 
     private TeamType type;
 
-    @OneToMany
+    @ManyToMany
     private List<User> users;
 
     public Team(String teamName, TeamType type, List<User> users) {

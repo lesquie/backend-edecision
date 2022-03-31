@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class Vote {
     @Id
     @GeneratedValue
+    @Column(name = "vote_id")
     private int id;
 
     @OneToOne
