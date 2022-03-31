@@ -37,7 +37,7 @@ public class ProjectController {
                 .map(project -> {
                     project.setName(newProject.getName());
                     project.setTeams(newProject.getTeams());
-                    return project;
+                    return projectRepository.save(project);
                 })
                 .orElseGet(() -> {
                     newProject.setId(id);
